@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 test('production funnel controls and payment fields', async ({ page }) => {
   await page.goto('https://www.gemstock.online/', { waitUntil: 'domcontentloaded' });
@@ -40,4 +40,17 @@ test('production funnel controls and payment fields', async ({ page }) => {
   await expect(page.locator('.accept-plan')).toBeVisible();
   await page.locator('.decline-plan').click();
   await expect(page).toHaveURL(/#\/thank-you$/);
+});
+
+test('admin authenticates and renders analytics', async ({ page }) => {
+  test.skip(!process.env.ADMIN_TEST_PASSWORD, 'Admin test password not provided');
+  await page.goto('https://www.gemstock.online/admin');
+  await expect(page.locator('#adminLogin')).toBeVisible();
+  await page.locator('input[name="password"]').fill(process.env.ADMIN_TEST_PASSWORD);
+  await page.getByRole('button', { name: 'Sign In' }).click();
+  await expect(page.getByRole('heading', { name: 'Gem Academy Live' })).toBeVisible();
+  await expect(page.locator('.metrics article')).toHaveCount(8);
+  await expect(page.getByRole('heading', { name: 'Live payment activity' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Opt-ins' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Sold leads and refunds' })).toBeVisible();
 });
