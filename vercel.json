@@ -6,5 +6,8 @@
     "api/[...path].mjs": {
       "maxDuration": 15
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/admin", "destination": "/index.html" }
+  ]
 }
