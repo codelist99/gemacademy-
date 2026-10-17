@@ -1,0 +1,1 @@
+{"scripts":{"dev":"node server.mjs --dev","build":"vite build","start":"node server.mjs"},"dependencies":{"dotenv":"^17.2.3","express":"^5.1.0"},"devDependencies":{"vite":"^7.1.7"}}
