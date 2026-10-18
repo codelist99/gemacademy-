@@ -42,12 +42,9 @@ test('production funnel controls and payment fields', async ({ page }) => {
   await expect(page).toHaveURL(/#\/thank-you$/);
 });
 
-test('admin authenticates and renders analytics', async ({ page }) => {
-  test.skip(!process.env.ADMIN_TEST_PASSWORD, 'Admin test password not provided');
+test('admin renders analytics without authentication', async ({ page }) => {
   await page.goto('https://www.gemstock.online/admin');
-  await expect(page.locator('#adminLogin')).toBeVisible();
-  await page.locator('input[name="password"]').fill(process.env.ADMIN_TEST_PASSWORD);
-  await page.getByRole('button', { name: 'Sign In' }).click();
+  await expect(page.locator('#adminLogin')).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'Gem Academy Live' })).toBeVisible();
   await expect(page.locator('.metrics article')).toHaveCount(8);
   await expect(page.getByRole('heading', { name: 'Live payment activity' })).toBeVisible();
